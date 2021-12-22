@@ -1,0 +1,125 @@
+{
+    "description": "A basic bar chart example, with value labels shown upon mouse hover.",
+    "width": 800,
+    "height": 400,
+    "padding": 5,
+    "background": "#FFFFFF",
+    "baseline":"bottom",
+
+    "title":{
+        "text": "India Population",
+        "orient":"bottom",
+        "align":"center",
+        "encode": {
+
+            "title": {
+                "enter": {
+              "fill": {"value": "red"},
+              "fontSize": {"value": 30}
+            }
+            
+          },
+          "subtitle": {
+            "interactive": true,
+            "update": {
+                "fontsize":{"value": 50},
+              "fontStyle": {"value": "bold"}
+            },
+            "hover": {
+              "fontStyle": {"value": "normal"}
+            }
+          }
+        }
+      },
+    "data": [
+      {
+        "name": "table",
+        "values": [
+            
+            
+        ]
+      }
+    ],
+  
+    "signals": [
+      {
+        "name": "tooltip",
+        "value": {},
+        "on": [
+          { "events": "rect:mouseover", "update": "datum" },
+          { "events": "rect:mouseout", "update": "{}" }
+        ]
+      }
+    ],
+  
+    "scales": [
+      {
+        "name": "xscale",
+        "type": "band",
+        "domain": { "data": "table", "field": "Year" },
+        "range": "width",
+        "padding": 0.15,
+        "round": true
+      },
+      {
+        "name": "yscale",
+        "domain": { "data": "table", "field": "Population" },
+        "nice": true,
+        "range": "height",
+        "labelFontSize":15
+      }
+    ],
+  
+    "axes": [
+      { "orient": "bottom", "scale": "xscale", "title": "Year","labelFontSize":15,"titleFontSize":20 },
+      { "orient": "left", "scale": "yscale", "title": "Population" ,"labelFontSize":15,"titleFontSize":20}
+    ],
+  
+    "marks": [
+      {
+        "type": "rect",
+        "from": { "data": "table" },
+        "encode": {
+          "enter": {
+            "x": { "scale": "xscale", "field": "Year" ,"labelFontSize":20 },
+            "width": { "scale": "xscale", "band": 1 },
+            "y": { "scale": "yscale", "field": "Population" ,"labelFontSize":20},
+            "y2": { "scale": "yscale", "value": 0 }
+          },
+          "update": {
+            "fill": { "value": "#173f72" }
+          },
+          "hover": {
+            "fill": { "value": "#b32111" }
+          }
+        }
+      },
+      {
+        "type": "text",
+        "encode": {
+          "enter": {
+            "align": { "value": "center" },
+            "baseline": { "value": "bottom" },
+            "fill": { "value": "red" }
+
+          },
+
+          "update": {
+            "x": { "scale": "xscale", "signal": "tooltip.Year", "band": 0.9 },
+            "y": {
+              "scale": "yscale",
+              "signal": "tooltip.Population",
+              "offset": -2
+            },
+            "text": { "signal":"tooltip.Population" },
+      
+            "fillOpacity": [
+              { "test": "datum === tooltip", "value": 0 },
+              { "value": 1 }
+            ]
+          }
+        }
+      }
+    ]
+  }
+  
